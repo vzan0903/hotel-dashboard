@@ -257,4 +257,26 @@
             if(!state.date || !DB[state.date]) return; var todayData = DB[state.date][state.bed];
             var up=0, down=0, flat=0, total=0, count=0, list=[];
             state.selectedHotels.forEach(h => {
-                if(todayData[h] && today
+                if(todayData[h] && todayData[h].current !== null) {
+                    var info = todayData[h]; total += info.current; count++;
+                    var first = info.points.length > 0 ? info.points[0][1] : info.current;
+                    var diff = info.current - first;
+                    if(diff > 0) up++; else if(diff < 0) down++; else flat++;
+                    list.push({name:h, p:info.current, d:diff});
+                }
+            });
+            var avg = count ? Math.round(total/count) : 0; var tot = up+down+flat;
+            document.getElementById('market-barometer').innerHTML = `<div class="sum-row"><span>市场均价</span> <span class="sum-val">¥${avg}</span></div><div class="sum-row"><span>涨 / 跌 (家)</span> <span class="sum-val"><span class="trend-up">${up}</span> / <span class="trend-down">${down}</span></span></div><div class="trend-bar"><div class="bar-segment" style="width:${tot?(up/tot)*100:0}%; background:#ef4444"></div><div class="bar-segment" style="width:${tot?(flat/tot)*100:0}%; background:#6b7280"></div><div class="bar-segment" style="width:${tot?(down/tot)*100:0}%; background:#10b981"></div></div>`;
+            var lh = ''; list.sort((a,b)=>a.p-b.p);
+            list.forEach(i=>{ var isMy=i.name===CONFIG.myHotel; var diffStr=i.d>0?`▲+${i.d}`:(i.d<0?`▼${i.d}`:'-'); var cls=i.d>0?'trend-up':(i.d<0?'trend-down':''); lh += `<div class="list-item ${isMy?'my':''}"><div style="font-weight:${isMy?'bold':'normal'};color:${isMy?'var(--text-accent)':'var(--text-sub)'}">${i.name}</div><div style="text-align:right"><div style="font-weight:bold;font-family:Consolas">¥${i.p}</div><div class="${cls}" style="font-size:11px">${diffStr}</div></div></div>`; });
+            document.getElementById('rank-list').innerHTML = lh;
+        }
+        function renderLogs() {
+            var logs = LOGS.filter(l=>l.date===state.date && l.bed===state.bed && state.selectedHotels.includes(l.hotel));
+            logs.sort((a,b)=>(new Date(a.time) < new Date(b.time) ? 1 : -1)); var h=''; logs.forEach(l=>{ var tag=l.type==='up'?'<span class="tag tag-red">涨</span>':'<span class="tag tag-green">跌</span>'; h+=`<div class="log-item"><span style="color:var(--text-sub);margin-right:10px;">${l.time}</span>${tag}<span style="color:var(--text-main);margin-right:5px;">${l.hotel}</span><span>${l.type==='up'?'上调':'下调'}至 ¥${l.val}</span></div>`; });
+            document.getElementById('log-list').innerHTML = h||'<div style="padding:20px;text-align:center;color:var(--text-sub)">无异动</div>';
+        }
+        boot();
+    </script>
+</body>
+</html>
