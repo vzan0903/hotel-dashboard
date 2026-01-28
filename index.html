@@ -2,19 +2,19 @@
 <html lang="zh-CN">
 <head>
     <meta charset="utf-8">
-    <title>酒店价格指挥中心 V24.0 (增量追加版)</title>
+    <title>酒店价格指挥中心 V26.0 (主角修正+智能排序)</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
     <script src="data.js"></script>
     <style>
-        /* === 样式保持 V23 不变，为节省篇幅省略，功能完全一致 === */
+        /* === CSS 样式保持优化版 === */
         :root{--bg-body:#f0f2f5;--bg-nav:#ffffff;--bg-panel:#ffffff;--bg-element:#f8fafc;--text-main:#1f2937;--text-sub:#6b7280;--text-accent:#3b82f6;--border-color:#e5e7eb;--border-hover:#9ca3af;--chart-split:#e5e7eb;--chart-axis:#6b7280;--zoom-border:#d1d5db;--zoom-fill:rgba(59,130,246,0.1);--tooltip-bg:rgba(255,255,255,0.95);--tooltip-text:#1f2937;--tooltip-border:#e5e7eb;--shadow:0 1px 3px rgba(0,0,0,0.1)}@media(prefers-color-scheme:dark){:root{--bg-body:#131720;--bg-nav:#1b212d;--bg-panel:#1b212d;--bg-element:#252b3b;--text-main:#e2e8f0;--text-sub:#94a3b8;--text-accent:#60a5fa;--border-color:#2d3748;--border-hover:#4b5563;--chart-split:#2d3748;--chart-axis:#94a3b8;--zoom-border:#4b5563;--zoom-fill:rgba(96,165,250,0.2);--tooltip-bg:rgba(27,33,45,0.95);--tooltip-text:#e2e8f0;--tooltip-border:#4b5563;--shadow:0 4px 6px rgba(0,0,0,0.3)}}body,html{margin:0;padding:0;width:100%;height:100%;background-color:var(--bg-body);color:var(--text-main);font-family:'Microsoft YaHei','Segoe UI',sans-serif;overflow:hidden;transition:background-color .3s,color .3s}.nav-bar{height:50px;background:var(--bg-nav);border-bottom:1px solid var(--border-color);display:flex;align-items:center;padding:0 20px;justify-content:space-between;flex-shrink:0;z-index:100;position:relative;box-shadow:var(--shadow)}.nav-left{display:flex;align-items:center;gap:30px}.app-title{font-size:18px;font-weight:700;color:var(--text-main);display:flex;align-items:center;letter-spacing:1px}.live-dot{width:8px;height:8px;background:#10b981;border-radius:50%;margin-right:10px;box-shadow:0 0 10px #10b981;animation:blink 2s infinite}@keyframes blink{0%{opacity:1}50%{opacity:.4}100%{opacity:1}}.view-tabs{display:flex;background:var(--bg-element);border-radius:6px;border:1px solid var(--border-color);padding:3px}.view-tab{padding:5px 15px;cursor:pointer;font-size:13px;color:var(--text-sub);transition:all .2s;border-radius:4px;font-weight:500}.view-tab.active{background:var(--bg-panel);color:var(--text-main);font-weight:700;box-shadow:0 1px 2px rgba(0,0,0,.1)}.bed-select{background:var(--bg-element);color:var(--text-main);border:1px solid var(--border-color);padding:5px 12px;border-radius:6px;margin-left:auto;outline:0;font-size:13px}.main-content{position:relative;width:100%;height:calc(100% - 50px)}.view-layer{position:absolute;top:0;left:0;width:100%;height:100%;background:var(--bg-body);display:flex;flex-direction:column;z-index:1;opacity:0;pointer-events:none;transition:opacity .2s}.view-layer.active{z-index:10;opacity:1;pointer-events:auto}.date-ribbon-wrapper{height:45px;border-bottom:1px solid var(--border-color);display:flex;align-items:center;background:var(--bg-nav);flex-shrink:0}.date-scroll{display:flex;overflow-x:auto;gap:6px;width:100%;padding:0 10px;scroll-behavior:smooth;-ms-overflow-style:none;scrollbar-width:none}.date-scroll::-webkit-scrollbar{display:none}.date-chip{min-width:85px;height:34px;background:var(--bg-element);border:1px solid var(--border-color);border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:all .2s}.date-chip:hover{border-color:var(--border-hover)}.date-chip.active{background:var(--bg-panel);border:1px solid var(--text-accent);box-shadow:0 0 0 1px var(--text-accent) inset}.date-chip.weekend{border-top:3px solid #fbbf24}.d-date{font-size:13px;font-weight:700;color:var(--text-main);line-height:1.1}.d-week{font-size:10px;color:var(--text-sub);line-height:1.1}.date-chip.active .d-date{color:var(--text-accent)}.grid-intraday{display:grid;grid-template-columns:3fr 1fr;grid-template-rows:1fr 200px;gap:15px;padding:15px;flex:1;min-height:0}.layout-trend{display:flex;flex-direction:column;gap:15px;padding:15px;height:100%;box-sizing:border-box}.trend-chart-box{flex:3;min-height:400px;display:flex;flex-direction:column}.trend-table-box{flex:2;min-height:0;display:flex;flex-direction:column}.panel{background:var(--bg-panel);border:1px solid var(--border-color);border-radius:8px;display:flex;flex-direction:column;overflow:hidden;position:relative;width:100%;height:100%;box-shadow:var(--shadow)}.panel-header{height:40px;min-height:40px;padding:0 15px;background:var(--bg-element);border-bottom:1px solid var(--border-color);display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:700;color:var(--text-sub);flex-shrink:0}.compare-select{background:var(--bg-panel);color:var(--text-accent);border:1px solid var(--border-color);border-radius:4px;padding:3px 8px;font-size:12px;outline:0;cursor:pointer;font-weight:700}.table-filters{display:flex;gap:10px;align-items:center}.tf-select{background:var(--bg-panel);color:var(--text-main);border:1px solid var(--border-color);border-radius:4px;padding:3px 8px;font-size:12px;outline:0;cursor:pointer}.tf-hint{font-size:12px;color:var(--text-sub);margin-right:5px}.legend-bar{height:45px;min-height:45px;border-top:1px solid var(--border-color);background:var(--bg-element);display:flex;align-items:center;padding:0 15px;gap:10px;overflow-x:auto;flex-shrink:0}.legend-btn{font-size:12px;padding:5px 12px;border-radius:20px;cursor:pointer;border:1px solid var(--border-color);color:var(--text-sub);background:var(--bg-panel);white-space:nowrap;display:flex;align-items:center;gap:6px;user-select:none;transition:all .2s}.legend-btn:hover{border-color:var(--text-sub)}.legend-btn.active{color:#fff;font-weight:700;border-color:transparent;box-shadow:0 2px 4px rgba(0,0,0,.1)}.legend-dot{width:8px;height:8px;border-radius:50%;background:#ccc}.action-btn{background:var(--bg-element);color:var(--text-main);border:1px solid var(--border-color)}.action-btn:hover{background:var(--border-color)}.scroll-list{overflow-y:auto;flex:1}.trend-table{width:100%;border-collapse:collapse;font-size:12px;font-family:'Consolas',monospace;text-align:left}.trend-table th{background:var(--bg-element);padding:10px;color:var(--text-sub);position:sticky;top:0;font-weight:600}.trend-table td{border-bottom:1px solid var(--border-color);padding:8px 10px;color:var(--text-main)}.trend-table tr:hover{background:var(--bg-element)}.market-summary{padding:15px;background:var(--bg-element);border-bottom:1px solid var(--border-color);flex-shrink:0}.sum-row{display:flex;justify-content:space-between;margin-bottom:8px;font-size:13px;color:var(--text-sub)}.sum-val{font-weight:700;color:var(--text-main)}.trend-bar{height:8px;background:var(--border-color);border-radius:4px;margin-top:12px;display:flex;overflow:hidden}.bar-segment{height:100%;transition:width .5s}.list-item{display:flex;justify-content:space-between;padding:10px 15px;border-bottom:1px solid var(--border-color);font-size:13px;color:var(--text-main);align-items:center}.list-item:hover{background:var(--bg-element)}.list-item.my{background:rgba(59,130,246,.1);border-left:3px solid var(--text-accent)}.trend-up{color:#ef4444}.trend-down{color:#10b981}.log-item{padding:8px 15px;border-bottom:1px dashed var(--border-color);font-size:12px;color:var(--text-sub);display:flex;align-items:center}.tag{padding:2px 6px;border-radius:4px;font-size:11px;margin-right:8px;font-weight:700;color:#fff}.tag-red{background:#ef4444}.tag-green{background:#10b981}::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--border-color);border-radius:3px}::-webkit-scrollbar-thumb:hover{background:var(--text-sub)}
     </style>
 </head>
 <body>
     <div class="nav-bar">
         <div class="nav-left">
-            <div class="app-title"><div class="live-dot"></div> 指挥中心 V24.0</div>
+            <div class="app-title"><div class="live-dot"></div> 指挥中心 V26.0</div>
             <div class="view-tabs">
                 <div class="view-tab active" onclick="switchView('intraday', this)">🔴 入住日追踪</div>
                 <div class="view-tab" onclick="switchView('trend', this)">📅 远期大盘</div>
@@ -62,195 +62,143 @@
     </div>
 
     <script>
-        // === V24 核心升级：数据自动合并引擎 ===
-        // 1. 定义基础配置
-        var CONFIG = {
-            myHotel: "亿铂酒店",
-            hotels: [], // 自动从数据中学习
-            weeks: ['周日','周一','周二','周三','周四','周五','周六']
+        // === 1. 核心配置更正：我的酒店改为“如林酒店” ===
+        var CONFIG = { 
+            myHotel: "如林酒店", 
+            hotels: [], 
+            weeks: ['周日','周一','周二','周三','周四','周五','周六'] 
         };
-        
-        // 2. 数据容器
-        var DB = {}; // db[date][bed][hotel] = { points:[], ... }
-        var LOGS = [];
-        var DATE_META = [];
-        
-        // 3. 启动逻辑：读取 window.HOTEL_DATA 并处理
-        function boot() {
-            var rawData = window.HOTEL_DATA || []; // 这是你在 data.js 里追加的列表
-            if(rawData.length === 0) { console.warn("无数据"); return; }
+        var DB = {}; var LOGS = []; var DATE_META = [];
+        // 2026年节假日定义
+        var HOLIDAYS_2026 = ["2026-02-15","2026-02-16","2026-02-17","2026-02-18","2026-02-19","2026-02-20","2026-02-21"];
 
-            // 处理所有数据包
+        function boot() {
+            var rawData = window.HOTEL_DATA || [];
+            if(rawData.length === 0) { console.warn("无数据"); return; }
             processData(rawData);
-            
-            // 初始化 UI
             initUI();
         }
 
-        // 4. 数据处理核心 (ETL)
         function processData(list) {
-            // 清空/重置
             CONFIG.hotels = [];
-            
             list.forEach(batch => {
-                var checkInDate = batch.date;
-                var bed = batch.bed;
-                var timestamp = batch.ts;
-                var prices = batch.prices; // { "亿铂": 300, "希尔顿": 400 }
-
-                // 4.1 注册日期
+                var checkInDate = batch.date; var bed = batch.bed; var timestamp = batch.ts; var prices = batch.prices;
                 if(!DB[checkInDate]) {
                     DB[checkInDate] = { 'big':{}, 'twin':{} };
                     let d = new Date(checkInDate);
+                    // 标记特殊日期（节假日或周末）
+                    let isSpecial = HOLIDAYS_2026.includes(checkInDate) || d.getDay()===5 || d.getDay()===6;
                     DATE_META.push({
-                        full: checkInDate,
-                        short: checkInDate.slice(5),
-                        week: CONFIG.weeks[d.getDay()],
-                        isWeekend: (d.getDay()===5||d.getDay()===6)
+                        full: checkInDate, short: checkInDate.slice(5),
+                        week: CONFIG.weeks[d.getDay()], isWeekend: d.getDay()===5 || d.getDay()===6,
+                        isSpecial: isSpecial
                     });
                 }
-
-                // 4.2 注册酒店 & 录入价格
                 for (var hName in prices) {
                     if(!CONFIG.hotels.includes(hName)) CONFIG.hotels.push(hName);
-                    
-                    if(!DB[checkInDate][bed][hName]) {
-                        DB[checkInDate][bed][hName] = { 
-                            points: [], current: 0, yesterday: 0, todayOpen: 0, 
-                            min: 9999, max: 0, avg: 0 
-                        };
-                    }
-                    
+                    if(!DB[checkInDate][bed][hName]) { DB[checkInDate][bed][hName] = { points: [], current: null, yesterday: null, todayOpen: null, min: 9999, max: 0 }; }
                     var entry = DB[checkInDate][bed][hName];
                     var val = prices[hName];
                     
-                    // 添加点
-                    entry.points.push([timestamp, val]);
+                    if (val !== null) {
+                        entry.points.push([timestamp, val]);
+                        entry.current = val;
+                        if(val < entry.min) entry.min = val;
+                        if(val > entry.max) entry.max = val;
+                    } else {
+                        entry.current = null;
+                    }
                     
-                    // 更新统计
-                    entry.current = val;
-                    if(val < entry.min) entry.min = val;
-                    if(val > entry.max) entry.max = val;
-                    
-                    // 计算异动 (对比上一次)
-                    if(entry.points.length > 1) {
+                    if(entry.points.length > 1 && val !== null) {
                         let prev = entry.points[entry.points.length-2][1];
                         let diff = val - prev;
-                        if(Math.abs(diff) >= 10) { // 阈值可调
-                            LOGS.push({
-                                date: checkInDate,
-                                time: new Date(timestamp).toLocaleDateString()+' '+new Date(timestamp).getHours()+':'+(new Date(timestamp).getMinutes()<10?'0':'')+new Date(timestamp).getMinutes(),
-                                hotel: hName, bed: bed,
-                                type: diff>0?'up':'down', val: val
-                            });
+                        if(Math.abs(diff) >= 10) {
+                            LOGS.push({ date: checkInDate, time: new Date(timestamp).toLocaleDateString()+' '+new Date(timestamp).getHours()+':'+(new Date(timestamp).getMinutes()<10?'0':'')+new Date(timestamp).getMinutes(), hotel: hName, bed: bed, type: diff>0?'up':'down', val: val });
                         }
                     }
                 }
             });
-
-            // 4.3 二次计算 (昨收、今开、均价)
-            DATE_META.sort((a,b) => a.full.localeCompare(b.full)); // 日期排序
-            // 这里可以添加更复杂的统计逻辑
+            DATE_META.sort((a,b) => a.full.localeCompare(b.full));
         }
 
-        // === UI 逻辑 (保持 V23 不变) ===
-        function getHotelColor(index) { var hue = (index * 137.508) % 360; return `hsl(${hue}, 70%, 55%)`; }
+        // 颜色：主角用显眼的蓝色，其他人用算法色
+        function getHotelColor(hName, index) { 
+            if (hName === CONFIG.myHotel) return '#3b82f6'; // 主角蓝
+            var hue = (index * 137.508) % 360; 
+            return `hsl(${hue}, 70%, 55%)`; 
+        }
+        
         var state = { view: 'intraday', bed: 'big', date: null, selectedHotels: [] };
         var chartIntraday, chartTrend;
 
         function initUI() {
             state.date = DATE_META.length > 0 ? DATE_META[0].full : null;
             state.selectedHotels = [...CONFIG.hotels];
-
-            var ribbon = document.getElementById('date-ribbon');
-            var tfDate = document.getElementById('tf-date');
-            ribbon.innerHTML = '';
-            
+            var ribbon = document.getElementById('date-ribbon'); var tfDate = document.getElementById('tf-date'); ribbon.innerHTML = '';
             DATE_META.forEach(d => {
                 var el = document.createElement('div');
                 el.className = `date-chip ${d.isWeekend?'weekend':''}`;
+                if(d.isSpecial) el.style.borderColor = '#ef4444'; 
                 el.id = `chip-${d.full}`;
-                el.innerHTML = `<div class="d-date">${d.short}</div><div class="d-week">${d.week}</div>`;
+                el.innerHTML = `<div class="d-date" style="${d.isSpecial?'color:#ef4444':''}">${d.short}</div><div class="d-week" style="${d.isSpecial?'color:#ef4444':''}">${d.week}</div>`;
                 el.onclick = () => switchDate(d.full);
                 ribbon.appendChild(el);
                 var opt = document.createElement('option'); opt.value = d.full; opt.text = `${d.short} (${d.week})`; tfDate.appendChild(opt);
             });
-
             renderCustomLegend('legend-intraday'); renderCustomLegend('legend-trend');
             chartIntraday = echarts.init(document.getElementById('chart-intraday'));
             chartTrend = echarts.init(document.getElementById('chart-trend'));
-            
             const ro = new ResizeObserver(() => { chartIntraday.resize(); chartTrend.resize(); });
             ro.observe(document.querySelector('.main-content'));
-
             if(state.date) switchDate(state.date);
-            updateTrendTitle();
-            refreshAll();
+            updateTrendTitle(); refreshAll();
         }
 
-        function updateTrendTitle() { 
-            if(DATE_META.length===0) return;
-            document.getElementById('trend-title').innerText = `未来价格大盘 (${DATE_META[0].full} 至 ${DATE_META[DATE_META.length-1].full})`; 
-        }
-        
+        function updateTrendTitle() { if(DATE_META.length===0) return; document.getElementById('trend-title').innerText = `未来价格大盘 (${DATE_META[0].full} 至 ${DATE_META[DATE_META.length-1].full})`; }
         function renderCustomLegend(cid) {
-            var c = document.getElementById(cid);
-            var html = `<div class="legend-btn action-btn" onclick="toggleAll(true)">全选</div><div class="legend-btn action-btn" onclick="toggleAll(false)">全不选</div><div style="width:1px; height:20px; background:var(--border-color); margin:0 5px;"></div>`;
+            var c = document.getElementById(cid); var html = `<div class="legend-btn action-btn" onclick="toggleAll(true)">全选</div><div class="legend-btn action-btn" onclick="toggleAll(false)">全不选</div><div style="width:1px; height:20px; background:var(--border-color); margin:0 5px;"></div>`;
             CONFIG.hotels.forEach((h, idx) => {
-                var col = getHotelColor(idx);
-                var act = state.selectedHotels.includes(h);
+                var col = getHotelColor(h, idx); var act = state.selectedHotels.includes(h);
                 var btnStyle = act ? `background:${col};color:#fff;border-color:${col}` : '';
-                var dotStyle = act ? `background:#fff` : `background:${col}`;
-                html += `<div class="legend-btn ${act?'active':''}" style="${btnStyle}" onclick="toggleHotel('${h}')"><div class="legend-dot" style="${dotStyle}"></div>${h}</div>`;
+                html += `<div class="legend-btn ${act?'active':''}" style="${btnStyle}" onclick="toggleHotel('${h}')"><div class="legend-dot" style="${act?'background:#fff':`background:${col}`}"></div>${h}</div>`;
             });
             c.innerHTML = html;
         }
         function toggleHotel(n) { state.selectedHotels.includes(n)?state.selectedHotels=state.selectedHotels.filter(h=>h!==n):state.selectedHotels.push(n); refreshAll(); }
         function toggleAll(chk) { state.selectedHotels = chk?[...CONFIG.hotels]:[]; refreshAll(); }
         function switchView(v, el) {
-            state.view = v;
-            document.querySelectorAll('.view-tab').forEach(t=>t.classList.remove('active')); el.classList.add('active');
+            state.view = v; document.querySelectorAll('.view-tab').forEach(t=>t.classList.remove('active')); el.classList.add('active');
             document.querySelectorAll('.view-layer').forEach(c=>c.classList.remove('active')); document.getElementById('view-'+v).classList.add('active');
             setTimeout(()=>{chartIntraday.resize();chartTrend.resize(); renderTrendChart();}, 50);
         }
         function switchDate(d) {
-            state.date = d;
-            document.querySelectorAll('.date-chip').forEach(c=>c.classList.remove('active'));
+            state.date = d; document.querySelectorAll('.date-chip').forEach(c=>c.classList.remove('active'));
             var act = document.getElementById(`chip-${d}`); if(act) { act.classList.add('active'); act.scrollIntoView({behavior:"smooth",inline:"center"}); }
             refreshAll();
         }
         function refreshGlobal() { state.bed = document.getElementById('bed-select').value; refreshAll(); }
-        function refreshAll() {
-            renderCustomLegend('legend-intraday'); renderCustomLegend('legend-trend');
-            renderIntradayChart(); renderBarometer(); renderLogs(); renderTrendChart(); renderTrendTable();
-        }
-
-        // 图表渲染逻辑 (适配新 DB 结构)
+        function refreshAll() { renderCustomLegend('legend-intraday'); renderCustomLegend('legend-trend'); renderIntradayChart(); renderBarometer(); renderLogs(); renderTrendChart(); renderTrendTable(); }
         function getChartTheme() {
             var isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-            return {
-                splitLine: isDark ? '#2d3748' : '#e5e7eb',
-                axisLabel: isDark ? '#94a3b8' : '#6b7280',
-                zoomBorder: isDark ? '#4b5563' : '#d1d5db',
-                zoomFill: isDark ? 'rgba(96, 165, 250, 0.2)' : 'rgba(59, 130, 246, 0.1)',
-                tooltipBg: isDark ? 'rgba(27, 33, 45, 0.95)' : 'rgba(255, 255, 255, 0.95)',
-                tooltipText: isDark ? '#e2e8f0' : '#1f2937',
-                tooltipBorder: isDark ? '#4b5563' : '#e5e7eb'
-            };
+            return { splitLine: isDark ? '#2d3748' : '#e5e7eb', axisLabel: isDark ? '#94a3b8' : '#6b7280', zoomBorder: isDark ? '#4b5563' : '#d1d5db', zoomFill: isDark ? 'rgba(96, 165, 250, 0.2)' : 'rgba(59, 130, 246, 0.1)', tooltipBg: isDark ? 'rgba(27, 33, 45, 0.95)' : 'rgba(255, 255, 255, 0.95)', tooltipText: isDark ? '#e2e8f0' : '#1f2937', tooltipBorder: isDark ? '#4b5563' : '#e5e7eb' };
         }
 
         function renderIntradayChart() {
-            var theme = getChartTheme();
-            var series = [];
+            var theme = getChartTheme(); var series = [];
             state.selectedHotels.forEach(h => {
-                var hIdx = CONFIG.hotels.indexOf(h); var isMy = h===CONFIG.myHotel; var col = getHotelColor(hIdx);
-                if(DB[state.date] && DB[state.date][state.bed] && DB[state.date][state.bed][h]) {
-                    series.push({ name: h, type: 'line', data: DB[state.date][state.bed][h].points, smooth: true, symbol: 'none', itemStyle: { color: col }, lineStyle: { width: isMy?3:1.5 }, z: isMy?10:2 });
+                var hIdx = CONFIG.hotels.indexOf(h); var isMy = h===CONFIG.myHotel; var col = getHotelColor(h, hIdx);
+                if(DB[state.date] && DB[state.date][state.bed] && DB[state.date][state.bed][h]) { 
+                    series.push({ name: h, type: 'line', data: DB[state.date][state.bed][h].points, smooth: true, symbol: 'none', itemStyle: { color: col }, lineStyle: { width: isMy?4:1.5 }, z: isMy?10:2 }); 
                 }
             });
             chartIntraday.setOption({
-                backgroundColor: 'transparent', legend: { show: false }, 
-                tooltip: { trigger: 'axis', backgroundColor: theme.tooltipBg, borderColor: theme.tooltipBorder, textStyle: { color: theme.tooltipText } },
+                backgroundColor: 'transparent', 
+                legend: { show: false }, 
+                tooltip: { 
+                    trigger: 'axis', 
+                    order: 'valueAsc', // === 核心功能：按价格从低到高排序 ===
+                    backgroundColor: theme.tooltipBg, borderColor: theme.tooltipBorder, textStyle: { color: theme.tooltipText } 
+                },
                 grid: { left:'2%', right:'4%', top:'10%', bottom:'15%', containLabel:true },
                 dataZoom: [ { type: 'slider', show: true, xAxisIndex: [0], start: 0, end: 100, height: 20, bottom: 5, borderColor: theme.zoomBorder, fillerColor: theme.zoomFill, handleStyle: {color:'#3b82f6'} }, { type: 'inside', xAxisIndex: [0] } ],
                 xAxis: { type:'time', splitLine:{show:true, lineStyle:{color: theme.splitLine, type:'dashed'}}, axisLabel:{ color: theme.axisLabel, formatter: '{MM}-{dd}\n{HH}:{mm}', hideOverlap: true } },
@@ -260,21 +208,29 @@
         }
 
         function renderTrendChart() {
-            var theme = getChartTheme();
-            var series = [];
+            var theme = getChartTheme(); var series = [];
             state.selectedHotels.forEach(h => {
-                var hIdx = CONFIG.hotels.indexOf(h); var isMy = h===CONFIG.myHotel; var col = getHotelColor(hIdx);
-                var data = DATE_META.map(d => {
-                    var info = DB[d.full][state.bed][h];
-                    return info ? info.current : null;
-                });
-                series.push({ name: h, type: 'line', data: data, smooth: true, symbolSize: 6, itemStyle: { color: col }, lineStyle: { width: isMy?3:1.5 } });
+                var hIdx = CONFIG.hotels.indexOf(h); var isMy = h===CONFIG.myHotel; var col = getHotelColor(h, hIdx);
+                var data = DATE_META.map(d => { var info = DB[d.full][state.bed][h]; return info ? info.current : null; });
+                series.push({ name: h, type: 'line', data: data, smooth: true, symbolSize: 6, itemStyle: { color: col }, lineStyle: { width: isMy?4:1.5 }, z: isMy?10:2 }); // 我的线条加粗
             });
             chartTrend.setOption({
-                backgroundColor: 'transparent', legend: { show: false }, 
-                tooltip: { trigger: 'axis', backgroundColor: theme.tooltipBg, borderColor: theme.tooltipBorder, textStyle: { color: theme.tooltipText } },
+                backgroundColor: 'transparent', 
+                legend: { show: false }, 
+                tooltip: { 
+                    trigger: 'axis', 
+                    order: 'valueAsc', // === 核心功能：按价格从低到高排序 ===
+                    backgroundColor: theme.tooltipBg, borderColor: theme.tooltipBorder, textStyle: { color: theme.tooltipText } 
+                },
                 grid: { left:'2%', right:'3%', top:'10%', bottom:'5%', containLabel:true },
-                xAxis: { type:'category', data: DATE_META.map(d=>d.short), axisLabel: { color: theme.axisLabel } },
+                xAxis: { 
+                    type:'category', 
+                    data: DATE_META.map(d=>d.short), 
+                    axisLabel: { 
+                        color: function(val, index) { return DATE_META[index].isSpecial ? '#ef4444' : theme.axisLabel; }, // 节假日标红
+                        formatter: function(val, index) { return val + '\n' + DATE_META[index].week; } // 显示周几
+                    } 
+                },
                 yAxis: { type:'value', scale:true, splitLine:{lineStyle:{color: theme.splitLine}}, axisLabel:{color: theme.axisLabel} },
                 series: series
             }, true);
@@ -289,7 +245,8 @@
                     if(DB[d.full] && DB[d.full][state.bed] && DB[d.full][state.bed][h]) {
                         var info = DB[d.full][state.bed][h];
                         var isMy = h===CONFIG.myHotel;
-                        html += `<tr><td>${d.short}</td><td style="color:${isMy?'var(--text-accent)':'var(--text-sub)'};font-weight:${isMy?'bold':'normal'}">${h}</td><td style="font-weight:bold">¥${info.current}</td><td style="color:#10b981">¥${info.min}</td><td style="color:#ef4444">¥${info.max}</td><td>¥${Math.round(info.points.reduce((a,b)=>a+b[1],0)/info.points.length)}</td></tr>`;
+                        var valDisplay = info.current === null ? '<span style="color:#aaa">--</span>' : `¥${info.current}`;
+                        html += `<tr><td>${d.short}</td><td style="color:${isMy?'var(--text-accent)':'var(--text-sub)'};font-weight:${isMy?'bold':'normal'}">${h}</td><td style="font-weight:bold">${valDisplay}</td><td style="color:#10b981">¥${info.min}</td><td style="color:#ef4444">¥${info.max}</td><td>--</td></tr>`;
                     }
                 });
             });
@@ -297,51 +254,7 @@
         }
 
         function renderBarometer() {
-            if(!state.date || !DB[state.date]) return;
-            var todayData = DB[state.date][state.bed];
+            if(!state.date || !DB[state.date]) return; var todayData = DB[state.date][state.bed];
             var up=0, down=0, flat=0, total=0, count=0, list=[];
-            var mode = document.getElementById('compare-mode').value; 
-            
             state.selectedHotels.forEach(h => {
-                if(todayData[h]) {
-                    var info = todayData[h];
-                    total += info.current; count++;
-                    // 简单对比：暂时用当前值 vs 数组第一个值 (实际可优化为存昨日收盘)
-                    var first = info.points[0][1];
-                    var diff = info.current - first;
-                    if(diff > 0) up++; else if(diff < 0) down++; else flat++;
-                    list.push({name:h, p:info.current, d:diff});
-                }
-            });
-
-            var avg = count ? Math.round(total/count) : 0;
-            var totalCount = up+down+flat;
-            var upPct = totalCount ? (up/totalCount)*100 : 0;
-            var downPct = totalCount ? (down/totalCount)*100 : 0;
-            var flatPct = totalCount ? (flat/totalCount)*100 : 0;
-
-            document.getElementById('market-barometer').innerHTML = `<div class="sum-row"><span>市场均价</span> <span class="sum-val">¥${avg}</span></div><div class="sum-row"><span>涨 / 跌 (家)</span> <span class="sum-val"><span class="trend-up">${up}</span> / <span class="trend-down">${down}</span></span></div><div class="trend-bar"><div class="bar-segment" style="width:${upPct}%; background:#ef4444"></div><div class="bar-segment" style="width:${flatPct}%; background:#6b7280"></div><div class="bar-segment" style="width:${downPct}%; background:#10b981"></div></div>`;
-
-            var lh = ''; list.sort((a,b)=>a.p-b.p);
-            list.forEach(i=>{
-                var isMy=i.name===CONFIG.myHotel; var diffStr = i.d>0?`▲+${i.d}`:(i.d<0?`▼${i.d}`:'-'); var cls = i.d>0?'trend-up':(i.d<0?'trend-down':'');
-                lh += `<div class="list-item ${isMy?'my':''}"><div style="font-weight:${isMy?'bold':'normal'};color:${isMy?'var(--text-accent)':'var(--text-sub)'}">${i.name}</div><div style="text-align:right"><div style="font-weight:bold;font-family:Consolas">¥${i.p}</div><div class="${cls}" style="font-size:11px">${diffStr}</div></div></div>`;
-            });
-            document.getElementById('rank-list').innerHTML = lh;
-        }
-
-        function renderLogs() {
-            var logs = LOGS.filter(l=>l.date===state.date && l.bed===state.bed && state.selectedHotels.includes(l.hotel));
-            logs.sort((a,b)=>(new Date(a.time) < new Date(b.time) ? 1 : -1));
-            var h=''; logs.forEach(l=>{
-                var tag=l.type==='up'?'<span class="tag tag-red">涨</span>':'<span class="tag tag-green">跌</span>';
-                h+=`<div class="log-item"><span style="color:var(--text-sub);margin-right:10px;">${l.time}</span>${tag}<span style="color:var(--text-main);margin-right:5px;">${l.hotel}</span><span>${l.type==='up'?'上调':'下调'}至 ¥${l.val}</span></div>`;
-            });
-            document.getElementById('log-list').innerHTML = h||'<div style="padding:20px;text-align:center;color:var(--text-sub)">当前筛选条件下无异动</div>';
-        }
-
-        // 启动
-        boot();
-    </script>
-</body>
-</html>
+                if(todayData[h] && today
