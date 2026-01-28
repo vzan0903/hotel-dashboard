@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="utf-8">
-    <title>酒店价格指挥中心 V27.0 (修复版)</title>
+    <title>酒店价格指挥中心 V28.0 (24H制+实点显示)</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
     <script src="data.js"></script>
@@ -14,7 +14,7 @@
 <body>
     <div class="nav-bar">
         <div class="nav-left">
-            <div class="app-title"><div class="live-dot"></div> 指挥中心 V27.0</div>
+            <div class="app-title"><div class="live-dot"></div> 指挥中心 V28.0</div>
             <div class="view-tabs">
                 <div class="view-tab active" onclick="switchView('intraday', this)">🔴 入住日追踪</div>
                 <div class="view-tab" onclick="switchView('trend', this)">📅 远期大盘</div>
@@ -62,7 +62,6 @@
     </div>
 
     <script>
-        // === 1. 主角更正：如林酒店 ===
         var CONFIG = { 
             myHotel: "如林酒店", 
             hotels: [], 
@@ -78,7 +77,6 @@
             initUI();
         }
 
-        // === 2. 数据处理：修复 9999/0 bug ===
         function processData(list) {
             CONFIG.hotels = [];
             list.forEach(batch => {
@@ -95,7 +93,6 @@
                 }
                 for (var hName in prices) {
                     if(!CONFIG.hotels.includes(hName)) CONFIG.hotels.push(hName);
-                    // 初始化改为 null，避免 9999/0 出现
                     if(!DB[checkInDate][bed][hName]) { 
                         DB[checkInDate][bed][hName] = { points: [], current: null, yesterday: null, todayOpen: null, min: null, max: null }; 
                     }
@@ -105,14 +102,13 @@
                     if (val !== null) {
                         entry.points.push([timestamp, val]);
                         entry.current = val;
-                        // 仅当 val 有效时更新 min/max
                         if(entry.min === null || val < entry.min) entry.min = val;
                         if(entry.max === null || val > entry.max) entry.max = val;
                     } else {
                         entry.current = null;
+                        // 不推送 null 到 points，让线断开，或者只在非空时绘制
                     }
                     
-                    // 异动记录
                     if(entry.points.length > 1 && val !== null) {
                         let prev = entry.points[entry.points.length-2][1];
                         let diff = val - prev;
@@ -126,7 +122,7 @@
         }
 
         function getHotelColor(hName, index) { 
-            if (hName === CONFIG.myHotel) return '#3b82f6'; // 如林酒店用蓝色
+            if (hName === CONFIG.myHotel) return '#3b82f6'; 
             var hue = (index * 137.508) % 360; 
             return `hsl(${hue}, 70%, 55%)`; 
         }
@@ -186,21 +182,40 @@
             return { splitLine: isDark ? '#2d3748' : '#e5e7eb', axisLabel: isDark ? '#94a3b8' : '#6b7280', zoomBorder: isDark ? '#4b5563' : '#d1d5db', zoomFill: isDark ? 'rgba(96, 165, 250, 0.2)' : 'rgba(59, 130, 246, 0.1)', tooltipBg: isDark ? 'rgba(27, 33, 45, 0.95)' : 'rgba(255, 255, 255, 0.95)', tooltipText: isDark ? '#e2e8f0' : '#1f2937', tooltipBorder: isDark ? '#4b5563' : '#e5e7eb' };
         }
 
+        // === 核心修正：时间格式与点位显示 ===
         function renderIntradayChart() {
             var theme = getChartTheme(); var series = [];
             state.selectedHotels.forEach(h => {
                 var hIdx = CONFIG.hotels.indexOf(h); var isMy = h===CONFIG.myHotel; var col = getHotelColor(h, hIdx);
                 if(DB[state.date] && DB[state.date][state.bed] && DB[state.date][state.bed][h]) { 
-                    series.push({ name: h, type: 'line', data: DB[state.date][state.bed][h].points, smooth: true, symbol: 'none', itemStyle: { color: col }, lineStyle: { width: isMy?4:1.5 }, z: isMy?10:2 }); 
+                    series.push({ 
+                        name: h, type: 'line', 
+                        data: DB[state.date][state.bed][h].points, 
+                        smooth: true, 
+                        symbol: 'circle', // 强制显示点位
+                        symbolSize: 6,    // 点位大小
+                        itemStyle: { color: col }, 
+                        lineStyle: { width: isMy?4:1.5 }, 
+                        z: isMy?10:2 
+                    }); 
                 }
             });
             chartIntraday.setOption({
                 backgroundColor: 'transparent', legend: { show: false }, 
-                // === 3. 智能排序开启：valueAsc (从低到高) ===
-                tooltip: { trigger: 'axis', order: 'valueAsc', backgroundColor: theme.tooltipBg, borderColor: theme.tooltipBorder, textStyle: { color: theme.tooltipText } },
+                tooltip: { 
+                    trigger: 'axis', order: 'valueAsc', 
+                    backgroundColor: theme.tooltipBg, borderColor: theme.tooltipBorder, textStyle: { color: theme.tooltipText } 
+                },
                 grid: { left:'2%', right:'4%', top:'10%', bottom:'15%', containLabel:true },
-                dataZoom: [ { type: 'slider', show: true, xAxisIndex: [0], start: 0, end: 100, height: 20, bottom: 5, borderColor: theme.zoomBorder, fillerColor: theme.zoomFill, handleStyle: {color:'#3b82f6'} }, { type: 'inside', xAxisIndex: [0] } ],
-                xAxis: { type:'time', splitLine:{show:true, lineStyle:{color: theme.splitLine, type:'dashed'}}, axisLabel:{ color: theme.axisLabel, formatter: '{MM}-{dd}\n{HH}:{mm}', hideOverlap: true } },
+                // dataZoom 自动适应数据范围
+                dataZoom: [ { type: 'slider', show: true, xAxisIndex: [0], filterMode: 'empty', height: 20, bottom: 5, borderColor: theme.zoomBorder, fillerColor: theme.zoomFill, handleStyle: {color:'#3b82f6'} }, { type: 'inside', xAxisIndex: [0] } ],
+                xAxis: { 
+                    type:'time', 
+                    splitLine:{show:true, lineStyle:{color: theme.splitLine, type:'dashed'}}, 
+                    // 24小时制格式化
+                    axisLabel:{ color: theme.axisLabel, formatter: '{HH}:{mm}', hideOverlap: true },
+                    minInterval: 3600 * 1000 // 最小间隔1小时
+                },
                 yAxis: { type:'value', scale:true, splitLine:{lineStyle:{color: theme.splitLine}}, axisLabel:{color: theme.axisLabel} },
                 series: series
             }, true);
@@ -215,7 +230,6 @@
             });
             chartTrend.setOption({
                 backgroundColor: 'transparent', legend: { show: false }, 
-                // === 3. 智能排序开启：valueAsc (从低到高) ===
                 tooltip: { trigger: 'axis', order: 'valueAsc', backgroundColor: theme.tooltipBg, borderColor: theme.tooltipBorder, textStyle: { color: theme.tooltipText } },
                 grid: { left:'2%', right:'3%', top:'10%', bottom:'5%', containLabel:true },
                 xAxis: { 
@@ -236,11 +250,9 @@
                     if(DB[d.full] && DB[d.full][state.bed] && DB[d.full][state.bed][h]) {
                         var info = DB[d.full][state.bed][h];
                         var isMy = h===CONFIG.myHotel;
-                        // === 修复显示：如果是 null 显示 -- ===
                         var valDisplay = info.current === null ? '<span style="color:#aaa">--</span>' : `¥${info.current}`;
                         var minDisplay = info.min === null ? '<span style="color:#aaa">--</span>' : `¥${info.min}`;
                         var maxDisplay = info.max === null ? '<span style="color:#aaa">--</span>' : `¥${info.max}`;
-                        
                         html += `<tr><td>${d.short}</td><td style="color:${isMy?'var(--text-accent)':'var(--text-sub)'};font-weight:${isMy?'bold':'normal'}">${h}</td><td style="font-weight:bold">${valDisplay}</td><td style="color:#10b981">${minDisplay}</td><td style="color:#ef4444">${maxDisplay}</td><td>--</td></tr>`;
                     }
                 });
