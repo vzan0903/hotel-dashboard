@@ -2,19 +2,19 @@
 <html lang="zh-CN">
 <head>
     <meta charset="utf-8">
-    <title>酒店价格指挥中心 V26.0 (主角修正+智能排序)</title>
+    <title>酒店价格指挥中心 V27.0 (修复版)</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
     <script src="data.js"></script>
     <style>
-        /* === CSS 样式保持优化版 === */
+        /* === 样式区 (保持 V26 风格) === */
         :root{--bg-body:#f0f2f5;--bg-nav:#ffffff;--bg-panel:#ffffff;--bg-element:#f8fafc;--text-main:#1f2937;--text-sub:#6b7280;--text-accent:#3b82f6;--border-color:#e5e7eb;--border-hover:#9ca3af;--chart-split:#e5e7eb;--chart-axis:#6b7280;--zoom-border:#d1d5db;--zoom-fill:rgba(59,130,246,0.1);--tooltip-bg:rgba(255,255,255,0.95);--tooltip-text:#1f2937;--tooltip-border:#e5e7eb;--shadow:0 1px 3px rgba(0,0,0,0.1)}@media(prefers-color-scheme:dark){:root{--bg-body:#131720;--bg-nav:#1b212d;--bg-panel:#1b212d;--bg-element:#252b3b;--text-main:#e2e8f0;--text-sub:#94a3b8;--text-accent:#60a5fa;--border-color:#2d3748;--border-hover:#4b5563;--chart-split:#2d3748;--chart-axis:#94a3b8;--zoom-border:#4b5563;--zoom-fill:rgba(96,165,250,0.2);--tooltip-bg:rgba(27,33,45,0.95);--tooltip-text:#e2e8f0;--tooltip-border:#4b5563;--shadow:0 4px 6px rgba(0,0,0,0.3)}}body,html{margin:0;padding:0;width:100%;height:100%;background-color:var(--bg-body);color:var(--text-main);font-family:'Microsoft YaHei','Segoe UI',sans-serif;overflow:hidden;transition:background-color .3s,color .3s}.nav-bar{height:50px;background:var(--bg-nav);border-bottom:1px solid var(--border-color);display:flex;align-items:center;padding:0 20px;justify-content:space-between;flex-shrink:0;z-index:100;position:relative;box-shadow:var(--shadow)}.nav-left{display:flex;align-items:center;gap:30px}.app-title{font-size:18px;font-weight:700;color:var(--text-main);display:flex;align-items:center;letter-spacing:1px}.live-dot{width:8px;height:8px;background:#10b981;border-radius:50%;margin-right:10px;box-shadow:0 0 10px #10b981;animation:blink 2s infinite}@keyframes blink{0%{opacity:1}50%{opacity:.4}100%{opacity:1}}.view-tabs{display:flex;background:var(--bg-element);border-radius:6px;border:1px solid var(--border-color);padding:3px}.view-tab{padding:5px 15px;cursor:pointer;font-size:13px;color:var(--text-sub);transition:all .2s;border-radius:4px;font-weight:500}.view-tab.active{background:var(--bg-panel);color:var(--text-main);font-weight:700;box-shadow:0 1px 2px rgba(0,0,0,.1)}.bed-select{background:var(--bg-element);color:var(--text-main);border:1px solid var(--border-color);padding:5px 12px;border-radius:6px;margin-left:auto;outline:0;font-size:13px}.main-content{position:relative;width:100%;height:calc(100% - 50px)}.view-layer{position:absolute;top:0;left:0;width:100%;height:100%;background:var(--bg-body);display:flex;flex-direction:column;z-index:1;opacity:0;pointer-events:none;transition:opacity .2s}.view-layer.active{z-index:10;opacity:1;pointer-events:auto}.date-ribbon-wrapper{height:45px;border-bottom:1px solid var(--border-color);display:flex;align-items:center;background:var(--bg-nav);flex-shrink:0}.date-scroll{display:flex;overflow-x:auto;gap:6px;width:100%;padding:0 10px;scroll-behavior:smooth;-ms-overflow-style:none;scrollbar-width:none}.date-scroll::-webkit-scrollbar{display:none}.date-chip{min-width:85px;height:34px;background:var(--bg-element);border:1px solid var(--border-color);border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:all .2s}.date-chip:hover{border-color:var(--border-hover)}.date-chip.active{background:var(--bg-panel);border:1px solid var(--text-accent);box-shadow:0 0 0 1px var(--text-accent) inset}.date-chip.weekend{border-top:3px solid #fbbf24}.d-date{font-size:13px;font-weight:700;color:var(--text-main);line-height:1.1}.d-week{font-size:10px;color:var(--text-sub);line-height:1.1}.date-chip.active .d-date{color:var(--text-accent)}.grid-intraday{display:grid;grid-template-columns:3fr 1fr;grid-template-rows:1fr 200px;gap:15px;padding:15px;flex:1;min-height:0}.layout-trend{display:flex;flex-direction:column;gap:15px;padding:15px;height:100%;box-sizing:border-box}.trend-chart-box{flex:3;min-height:400px;display:flex;flex-direction:column}.trend-table-box{flex:2;min-height:0;display:flex;flex-direction:column}.panel{background:var(--bg-panel);border:1px solid var(--border-color);border-radius:8px;display:flex;flex-direction:column;overflow:hidden;position:relative;width:100%;height:100%;box-shadow:var(--shadow)}.panel-header{height:40px;min-height:40px;padding:0 15px;background:var(--bg-element);border-bottom:1px solid var(--border-color);display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:700;color:var(--text-sub);flex-shrink:0}.compare-select{background:var(--bg-panel);color:var(--text-accent);border:1px solid var(--border-color);border-radius:4px;padding:3px 8px;font-size:12px;outline:0;cursor:pointer;font-weight:700}.table-filters{display:flex;gap:10px;align-items:center}.tf-select{background:var(--bg-panel);color:var(--text-main);border:1px solid var(--border-color);border-radius:4px;padding:3px 8px;font-size:12px;outline:0;cursor:pointer}.tf-hint{font-size:12px;color:var(--text-sub);margin-right:5px}.legend-bar{height:45px;min-height:45px;border-top:1px solid var(--border-color);background:var(--bg-element);display:flex;align-items:center;padding:0 15px;gap:10px;overflow-x:auto;flex-shrink:0}.legend-btn{font-size:12px;padding:5px 12px;border-radius:20px;cursor:pointer;border:1px solid var(--border-color);color:var(--text-sub);background:var(--bg-panel);white-space:nowrap;display:flex;align-items:center;gap:6px;user-select:none;transition:all .2s}.legend-btn:hover{border-color:var(--text-sub)}.legend-btn.active{color:#fff;font-weight:700;border-color:transparent;box-shadow:0 2px 4px rgba(0,0,0,.1)}.legend-dot{width:8px;height:8px;border-radius:50%;background:#ccc}.action-btn{background:var(--bg-element);color:var(--text-main);border:1px solid var(--border-color)}.action-btn:hover{background:var(--border-color)}.scroll-list{overflow-y:auto;flex:1}.trend-table{width:100%;border-collapse:collapse;font-size:12px;font-family:'Consolas',monospace;text-align:left}.trend-table th{background:var(--bg-element);padding:10px;color:var(--text-sub);position:sticky;top:0;font-weight:600}.trend-table td{border-bottom:1px solid var(--border-color);padding:8px 10px;color:var(--text-main)}.trend-table tr:hover{background:var(--bg-element)}.market-summary{padding:15px;background:var(--bg-element);border-bottom:1px solid var(--border-color);flex-shrink:0}.sum-row{display:flex;justify-content:space-between;margin-bottom:8px;font-size:13px;color:var(--text-sub)}.sum-val{font-weight:700;color:var(--text-main)}.trend-bar{height:8px;background:var(--border-color);border-radius:4px;margin-top:12px;display:flex;overflow:hidden}.bar-segment{height:100%;transition:width .5s}.list-item{display:flex;justify-content:space-between;padding:10px 15px;border-bottom:1px solid var(--border-color);font-size:13px;color:var(--text-main);align-items:center}.list-item:hover{background:var(--bg-element)}.list-item.my{background:rgba(59,130,246,.1);border-left:3px solid var(--text-accent)}.trend-up{color:#ef4444}.trend-down{color:#10b981}.log-item{padding:8px 15px;border-bottom:1px dashed var(--border-color);font-size:12px;color:var(--text-sub);display:flex;align-items:center}.tag{padding:2px 6px;border-radius:4px;font-size:11px;margin-right:8px;font-weight:700;color:#fff}.tag-red{background:#ef4444}.tag-green{background:#10b981}::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--border-color);border-radius:3px}::-webkit-scrollbar-thumb:hover{background:var(--text-sub)}
     </style>
 </head>
 <body>
     <div class="nav-bar">
         <div class="nav-left">
-            <div class="app-title"><div class="live-dot"></div> 指挥中心 V26.0</div>
+            <div class="app-title"><div class="live-dot"></div> 指挥中心 V27.0</div>
             <div class="view-tabs">
                 <div class="view-tab active" onclick="switchView('intraday', this)">🔴 入住日追踪</div>
                 <div class="view-tab" onclick="switchView('trend', this)">📅 远期大盘</div>
@@ -62,14 +62,13 @@
     </div>
 
     <script>
-        // === 1. 核心配置更正：我的酒店改为“如林酒店” ===
+        // === 1. 主角更正：如林酒店 ===
         var CONFIG = { 
             myHotel: "如林酒店", 
             hotels: [], 
             weeks: ['周日','周一','周二','周三','周四','周五','周六'] 
         };
         var DB = {}; var LOGS = []; var DATE_META = [];
-        // 2026年节假日定义
         var HOLIDAYS_2026 = ["2026-02-15","2026-02-16","2026-02-17","2026-02-18","2026-02-19","2026-02-20","2026-02-21"];
 
         function boot() {
@@ -79,6 +78,7 @@
             initUI();
         }
 
+        // === 2. 数据处理：修复 9999/0 bug ===
         function processData(list) {
             CONFIG.hotels = [];
             list.forEach(batch => {
@@ -86,7 +86,6 @@
                 if(!DB[checkInDate]) {
                     DB[checkInDate] = { 'big':{}, 'twin':{} };
                     let d = new Date(checkInDate);
-                    // 标记特殊日期（节假日或周末）
                     let isSpecial = HOLIDAYS_2026.includes(checkInDate) || d.getDay()===5 || d.getDay()===6;
                     DATE_META.push({
                         full: checkInDate, short: checkInDate.slice(5),
@@ -96,19 +95,24 @@
                 }
                 for (var hName in prices) {
                     if(!CONFIG.hotels.includes(hName)) CONFIG.hotels.push(hName);
-                    if(!DB[checkInDate][bed][hName]) { DB[checkInDate][bed][hName] = { points: [], current: null, yesterday: null, todayOpen: null, min: 9999, max: 0 }; }
+                    // 初始化改为 null，避免 9999/0 出现
+                    if(!DB[checkInDate][bed][hName]) { 
+                        DB[checkInDate][bed][hName] = { points: [], current: null, yesterday: null, todayOpen: null, min: null, max: null }; 
+                    }
                     var entry = DB[checkInDate][bed][hName];
                     var val = prices[hName];
                     
                     if (val !== null) {
                         entry.points.push([timestamp, val]);
                         entry.current = val;
-                        if(val < entry.min) entry.min = val;
-                        if(val > entry.max) entry.max = val;
+                        // 仅当 val 有效时更新 min/max
+                        if(entry.min === null || val < entry.min) entry.min = val;
+                        if(entry.max === null || val > entry.max) entry.max = val;
                     } else {
                         entry.current = null;
                     }
                     
+                    // 异动记录
                     if(entry.points.length > 1 && val !== null) {
                         let prev = entry.points[entry.points.length-2][1];
                         let diff = val - prev;
@@ -121,9 +125,8 @@
             DATE_META.sort((a,b) => a.full.localeCompare(b.full));
         }
 
-        // 颜色：主角用显眼的蓝色，其他人用算法色
         function getHotelColor(hName, index) { 
-            if (hName === CONFIG.myHotel) return '#3b82f6'; // 主角蓝
+            if (hName === CONFIG.myHotel) return '#3b82f6'; // 如林酒店用蓝色
             var hue = (index * 137.508) % 360; 
             return `hsl(${hue}, 70%, 55%)`; 
         }
@@ -192,13 +195,9 @@
                 }
             });
             chartIntraday.setOption({
-                backgroundColor: 'transparent', 
-                legend: { show: false }, 
-                tooltip: { 
-                    trigger: 'axis', 
-                    order: 'valueAsc', // === 核心功能：按价格从低到高排序 ===
-                    backgroundColor: theme.tooltipBg, borderColor: theme.tooltipBorder, textStyle: { color: theme.tooltipText } 
-                },
+                backgroundColor: 'transparent', legend: { show: false }, 
+                // === 3. 智能排序开启：valueAsc (从低到高) ===
+                tooltip: { trigger: 'axis', order: 'valueAsc', backgroundColor: theme.tooltipBg, borderColor: theme.tooltipBorder, textStyle: { color: theme.tooltipText } },
                 grid: { left:'2%', right:'4%', top:'10%', bottom:'15%', containLabel:true },
                 dataZoom: [ { type: 'slider', show: true, xAxisIndex: [0], start: 0, end: 100, height: 20, bottom: 5, borderColor: theme.zoomBorder, fillerColor: theme.zoomFill, handleStyle: {color:'#3b82f6'} }, { type: 'inside', xAxisIndex: [0] } ],
                 xAxis: { type:'time', splitLine:{show:true, lineStyle:{color: theme.splitLine, type:'dashed'}}, axisLabel:{ color: theme.axisLabel, formatter: '{MM}-{dd}\n{HH}:{mm}', hideOverlap: true } },
@@ -212,24 +211,16 @@
             state.selectedHotels.forEach(h => {
                 var hIdx = CONFIG.hotels.indexOf(h); var isMy = h===CONFIG.myHotel; var col = getHotelColor(h, hIdx);
                 var data = DATE_META.map(d => { var info = DB[d.full][state.bed][h]; return info ? info.current : null; });
-                series.push({ name: h, type: 'line', data: data, smooth: true, symbolSize: 6, itemStyle: { color: col }, lineStyle: { width: isMy?4:1.5 }, z: isMy?10:2 }); // 我的线条加粗
+                series.push({ name: h, type: 'line', data: data, smooth: true, symbolSize: 6, itemStyle: { color: col }, lineStyle: { width: isMy?4:1.5 }, z: isMy?10:2 });
             });
             chartTrend.setOption({
-                backgroundColor: 'transparent', 
-                legend: { show: false }, 
-                tooltip: { 
-                    trigger: 'axis', 
-                    order: 'valueAsc', // === 核心功能：按价格从低到高排序 ===
-                    backgroundColor: theme.tooltipBg, borderColor: theme.tooltipBorder, textStyle: { color: theme.tooltipText } 
-                },
+                backgroundColor: 'transparent', legend: { show: false }, 
+                // === 3. 智能排序开启：valueAsc (从低到高) ===
+                tooltip: { trigger: 'axis', order: 'valueAsc', backgroundColor: theme.tooltipBg, borderColor: theme.tooltipBorder, textStyle: { color: theme.tooltipText } },
                 grid: { left:'2%', right:'3%', top:'10%', bottom:'5%', containLabel:true },
                 xAxis: { 
-                    type:'category', 
-                    data: DATE_META.map(d=>d.short), 
-                    axisLabel: { 
-                        color: function(val, index) { return DATE_META[index].isSpecial ? '#ef4444' : theme.axisLabel; }, // 节假日标红
-                        formatter: function(val, index) { return val + '\n' + DATE_META[index].week; } // 显示周几
-                    } 
+                    type:'category', data: DATE_META.map(d=>d.short), 
+                    axisLabel: { color: function(val, index) { return DATE_META[index].isSpecial ? '#ef4444' : theme.axisLabel; }, formatter: function(val, index) { return val + '\n' + DATE_META[index].week; } } 
                 },
                 yAxis: { type:'value', scale:true, splitLine:{lineStyle:{color: theme.splitLine}}, axisLabel:{color: theme.axisLabel} },
                 series: series
@@ -245,8 +236,12 @@
                     if(DB[d.full] && DB[d.full][state.bed] && DB[d.full][state.bed][h]) {
                         var info = DB[d.full][state.bed][h];
                         var isMy = h===CONFIG.myHotel;
+                        // === 修复显示：如果是 null 显示 -- ===
                         var valDisplay = info.current === null ? '<span style="color:#aaa">--</span>' : `¥${info.current}`;
-                        html += `<tr><td>${d.short}</td><td style="color:${isMy?'var(--text-accent)':'var(--text-sub)'};font-weight:${isMy?'bold':'normal'}">${h}</td><td style="font-weight:bold">${valDisplay}</td><td style="color:#10b981">¥${info.min}</td><td style="color:#ef4444">¥${info.max}</td><td>--</td></tr>`;
+                        var minDisplay = info.min === null ? '<span style="color:#aaa">--</span>' : `¥${info.min}`;
+                        var maxDisplay = info.max === null ? '<span style="color:#aaa">--</span>' : `¥${info.max}`;
+                        
+                        html += `<tr><td>${d.short}</td><td style="color:${isMy?'var(--text-accent)':'var(--text-sub)'};font-weight:${isMy?'bold':'normal'}">${h}</td><td style="font-weight:bold">${valDisplay}</td><td style="color:#10b981">${minDisplay}</td><td style="color:#ef4444">${maxDisplay}</td><td>--</td></tr>`;
                     }
                 });
             });
